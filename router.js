@@ -2,13 +2,19 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('./controller/userController');
+const postController = require('./controller/postController');
 
-router.get('/', (req, res)=>{
-    res.render('home-guest')
-})
+const isAuth = require('./middleware/is-auth')
 
-// router.get('/register', userController.register)
+router.get('/', userController.home)
 
+// user related routes
 router.post('/register', userController.register)
+router.post('/login', userController.login)
+router.post('/logout', userController.logout)
+
+// post related routes
+router.get('/create-post', isAuth.isAuthenticated, postController.viewCreatePage)
+router.post('/create-post', isAuth.isAuthenticated, postController.createPost)
 
 module.exports = router;
